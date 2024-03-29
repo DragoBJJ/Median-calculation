@@ -58,8 +58,6 @@ const getDaysUntilFirstSunday = (year, month) => {
   return formattingDays;
 };
 
-const expensesData = Object.entries(expenses);
-
 const getCorrectformatDate = (date) => {
   const res = date.split("-");
   const year = Number(res[0]);
@@ -93,24 +91,29 @@ const displayDaysUntilFirstSunday = (date) => {
 };
 
 const agregateAllData = (expensesData) => {
-  return expensesData.map((data) => {
-    const date = data[0];
-    const expenses = data[1];
-    if (!Object.keys(expenses).length) return null;
-    const daysUntilFirstSunday = displayDaysUntilFirstSunday(date);
-    const matchingDays = daysUntilFirstSunday.filter((day) => expenses[day]);
-    return prepareDataToCalculate(expenses, matchingDays);
-  });
+  return expensesData
+    .map((data) => {
+      const date = data[0];
+      const expenses = data[1];
+      if (!Object.keys(expenses).length) return null;
+      const daysUntilFirstSunday = displayDaysUntilFirstSunday(date);
+      const matchingDays = daysUntilFirstSunday.filter((day) => expenses[day]);
+      console.log(`Your days meeting the condition: ${matchingDays}`);
+      const preparedData = prepareDataToCalculate(expenses, matchingDays);
+      console.log("---------------------------------");
+      return calculatMediana(preparedData);
+    })
+    .filter((median) => median);
 };
 
-const calculateFinallMediana = (expensesData) => {
-  const res = expensesData
-    .flatMap((expenses) => expenses)
-    .sort((a, b) => a - b)
-    .filter((expenses) => expenses);
+const calculateFinallMediana = (medians) => {
+  const res = medians.sort((a, b) => a - b);
   return calculatMediana(res);
 };
 
-const res = agregateAllData(expensesData);
-const mediana = calculateFinallMediana(res);
-console.log("mediana", mediana);
+const expensesData = Object.entries(expenses);
+const allMedians = agregateAllData(expensesData);
+const finalMedian = calculateFinallMediana(allMedians);
+
+console.log("Medians from all months", allMedians);
+console.log("Final Median", finalMedian);
