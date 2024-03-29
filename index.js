@@ -101,19 +101,18 @@ const agregateAllData = (expensesData) => {
       console.log(`Your days meeting the condition: ${matchingDays}`);
       const preparedData = prepareDataToCalculate(expenses, matchingDays);
       console.log("---------------------------------");
-      return calculatMediana(preparedData);
+      return preparedData;
     })
     .filter((median) => median);
 };
 
-const calculateFinallMediana = (medians) => {
-  const res = medians.sort((a, b) => a - b);
-  return calculatMediana(res);
+const calculateFinallMediana = (data) => {
+  const flatData = data.flatMap((data) => data).sort((a, b) => a - b);
+  return calculatMediana(flatData);
 };
 
 const expensesData = Object.entries(expenses);
-const allMedians = agregateAllData(expensesData);
-const finalMedian = calculateFinallMediana(allMedians);
+const preparedData = agregateAllData(expensesData);
+const finalMedian = calculateFinallMediana(preparedData);
 
-console.log("Medians from all months", allMedians);
 console.log("Final Median", finalMedian);
